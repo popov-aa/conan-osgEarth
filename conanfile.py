@@ -5,7 +5,7 @@ import os, shutil
 
 class OsgearthConan(ConanFile):
     name = "osgearth"
-    version = "2.10.1"
+    version = "2.6.0"
     license = "LGPL-3"
     settings = "os", "compiler", "build_type", "arch"
     options = {
@@ -20,7 +20,7 @@ class OsgearthConan(ConanFile):
     }
     build_requires = "cmake_installer/3.15.4@conan/stable"
     requires = (
-        "openscenegraph/3.6.4@bincrafters/stable",
+        "openscenegraph/3.4.1",
         "libcurl/7.61.1@bincrafters/stable",
 		"protobuf/3.6.1@bincrafters/stable",
 		"Poco/1.7.9@pocoproject/stable",
@@ -50,8 +50,13 @@ class OsgearthConan(ConanFile):
 
     def source(self):
         name = "osgearth"
-        tools.get("{0}/{1}-{2}.tar.gz".format(self.download_prefix, name, self.version))
-        extracted_dir = "{0}-{0}-".format(name) + self.version
+
+        #tools.get("{0}/{1}-{2}.tar.gz".format(self.download_prefix, name, self.version))
+        #extracted_dir = "{0}-{0}-".format(name) + self.version
+        self.run("git clone /home/popov-aa/repos/osgearth")
+        self.run("git checkout --detach d4eaee255d86799eaa2f0344de72cbe019b65e23", cwd=name)
+        extracted_dir = name
+
         os.rename(extracted_dir, self._source_subfolder)
 
         tools.replace_in_file(os.path.join(self._source_subfolder, "CMakeLists.txt"),
